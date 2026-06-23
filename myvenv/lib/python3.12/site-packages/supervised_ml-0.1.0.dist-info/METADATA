@@ -1,0 +1,28 @@
+Metadata-Version: 2.4
+Name: supervised-ml
+Version: 0.1.0
+Summary: Train and deploy a scikit-learn model on Azure
+Author-email: Harry Bhai <harrybhai@abc.com>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=2.1.0
+Requires-Dist: pandas>=2.2.2
+Requires-Dist: scipy>=1.10.0
+Requires-Dist: matplotlib>=3.8
+Requires-Dist: seaborn>=0.13
+Requires-Dist: scikit-learn>=1.8.0
+Requires-Dist: statsmodels>=0.14.0
+Requires-Dist: joblib
+Requires-Dist: onnx>=1.15.0
+Requires-Dist: onnxruntime>=1.15.0
+Requires-Dist: skl2onnx>=1.15.0
+Requires-Dist: azure-identity
+Requires-Dist: azure-ai-ml
+Requires-Dist: uvicorn
+Requires-Dist: python-dotenv>=1.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: isort>=5.0.0; extra == "dev"
+
+# GitHubAction
