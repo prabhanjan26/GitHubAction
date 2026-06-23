@@ -3,27 +3,26 @@
 # =============================
 import os
 import pandas as pd
+import joblib
 from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, precision_score, recall_score, f1_score
 
 # =============================
 # Load .env file
 # =============================
 load_dotenv()
 
-# Get file path from .env
 file_path = os.getenv("file_path")
+model_path = os.getenv("model_path")
 
 # =============================
 # Load Dataset
 # =============================
 df = pd.read_csv(file_path)
+df.dropna(inplace=True)
 
-# print("✅ Dataset Loaded Successfully\n")
-# print(df.head())
-df.dropna(inplace= True)
 # =============================
 # Features & Target
 # =============================
@@ -38,16 +37,15 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # =============================
-# Train Decision Tree Model
+# Train Model
 # =============================
 model = DecisionTreeClassifier(
     max_depth=4,
-    class_weight="balanced",   # helps with fraud imbalance
+    class_weight="balanced",
     random_state=42
 )
 
 model.fit(X_train, y_train)
-
 print("\n✅ Model Trained Successfully")
 
 # =============================
@@ -59,11 +57,18 @@ y_pred = model.predict(X_test)
 # Evaluation
 # =============================
 accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+
 cm = confusion_matrix(y_test, y_pred)
 report = classification_report(y_test, y_pred)
 
-print("\nModel Evaluation Results:")
-print(f"\nAccuracy: {accuracy:.2f}")
+print("\n📊 Model Evaluation Results:")
+print(f"Accuracy : {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall   : {recall:.4f}")
+print(f"F1 Score : {f1:.4f}")
 
 print("\nConfusion Matrix:")
 print(cm)
@@ -71,24 +76,23 @@ print(cm)
 print("\nClassification Report:")
 print(report)
 
-# # =============================
-# # Feature Importance
-# # =============================
-# importance = pd.DataFrame({
-#     "Feature": X.columns,
-#     "Importance": model.feature_importances_
-# }).sort_values(by="Importance", ascending=False)
+# =============================
+# Create Artifact (Model Package)
+# =============================
+artifact = {
+    "model": model,
+    "feature_columns": X.columns.tolist(),
+    "metrics": {
+        "accuracy": accuracy,
+        "precision": precision,
+        "recall": recall,
+        "f1_score": f1
+    }
+}
 
-# print("\n📈 Feature Importance:")
-# print(importance)
+# =============================
+# Save Model Artifact
+# =============================
+joblib.dump(artifact, model_path)
 
-# # =============================
-# # Save Predictions (Optional)
-# # =============================
-# output = X_test.copy()
-# output["Actual"] = y_test
-# output["Predicted"] = y_pred
-
-# output.to_csv("predictions_output.csv", index=False)
-
-# print("\n✅ Predictions saved to predictions_output.csv")
+print(f"\n✅ Model saved successfully at: {model_path}")
