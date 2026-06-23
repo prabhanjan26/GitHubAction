@@ -1,0 +1,58 @@
+[project]
+name = "supervised-ml"
+version = "0.1.0"
+description = "Train and deploy a scikit-learn model on Azure"
+readme = "README.md"
+requires-python = ">=3.10"
+
+authors = [
+    { name = "Harry Bhai", email = "harrybhai@abc.com" }
+]
+
+dependencies = [
+    # Core
+    "numpy>=2.1.0",
+    "pandas>=2.2.2",
+    "scipy>=1.10.0",
+
+    # Visualization
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+
+    # ML
+    "scikit-learn>=1.8.0",
+    "statsmodels>=0.14.0",
+    "joblib",
+
+    # ONNX / Deployment
+    "onnx>=1.15.0",
+    "onnxruntime>=1.15.0",
+    "skl2onnx>=1.15.0",
+
+    # Azure
+    "azure-identity",
+    "azure-ai-ml",
+
+    # API / Config
+    "uvicorn",
+    "python-dotenv>=1.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "black>=24.0.0",
+    "isort>=5.0.0"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+
+[tool.isort]
+profile = "black"
+
